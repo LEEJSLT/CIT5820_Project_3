@@ -130,6 +130,7 @@ def order_book():
     #Note that you can access the database session using g.session
     result = {'data': []}
     for this in g.session.query(Order).all():
+        
         result['data'].append({'sender_pk': this.sender_pk, 'receiver_pk': this.receiver_pk, 'buy_currency': this.buy_currency, 'sell_currency': this.sell_currency, 'buy_amount': this.buy_amount, 'sell_amount': this.sell_amount, 'signature': this.signature})
     
     return jsonify(result)
