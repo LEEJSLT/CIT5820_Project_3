@@ -32,6 +32,9 @@ def shutdown_session(response_or_exc):
 
 def log_message(d)
     # Takes input dictionary d and writes it to the Log table
+    message = json.dumps(d)
+    g.session.add(Log(message))
+    g.session.commit()
     pass
 
 """
@@ -109,8 +112,8 @@ def trade():
                 result = False
         
         # Case 3: any other crypto platform
-        # else:
-        #     result = False
+        else:
+            result = False
 
         if result is True:
             this_order = Order(sender_pk=sender_pk, receiver_pk=receiver_pk, buy_currency=buy_currency, sell_currency=sell_currency, buy_amount=buy_amount, sell_amount=sell_amount, signature=sig)
@@ -128,6 +131,7 @@ def order_book():
     result = {'data': []}
     for this in g.session.query(Order).all():
         result['data'].append({'sender_pk': this.sender_pk, 'receiver_pk': this.receiver_pk, 'buy_currency': this.buy_currency, 'sell_currency': this.sell_currency, 'buy_amount': this.buy_amount, 'sell_amount': this.sell_amount, 'signature': this.signature})
+    
     return jsonify(result)
 
 if __name__ == '__main__':
